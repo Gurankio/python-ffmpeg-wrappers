@@ -351,7 +351,7 @@ class AvFile:
         assert path.is_file()
 
         ffprobe = subprocess.run(
-            ('pyprobe', '-print_format', 'json', '-show_format', '-show_chapters', '-show_streams', str(path)),
+            ('ffprobe', '-print_format', 'json', '-show_format', '-show_chapters', '-show_streams', str(path)),
             check=True,  # TODO: proper handling
             timeout=30,  # TODO: proper handling
             stdout=subprocess.PIPE,
