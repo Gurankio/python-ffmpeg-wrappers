@@ -1,0 +1,113 @@
+ffmpeg
+-i 'Koi to Senkyo to Chocolate - S01E01.mkv'
+-map 0:0
+-c:v h264_videotoolbox
+    -b:v 3000k
+    -allow_sw 1
+-filter_complex "[0:v]trim=start=10:end=20,setpts=PTS-STARTPTS,format=yuv420p[0v];[0:a]atrim=start=10:end=20,asetpts=PTS-STARTPTS[0a];[0:v]trim=start=30:end=40,setpts=PTS-STARTPTS,format=yuv420p[1v];[0:a]atrim=start=30:end=40,asetpts=PTS-STARTPTS[1a];[0v][0a][1v][1a]concat=n=2:v=1:a=1[outv][outa]"
+-map [outv]
+-map [outa]
+out.mkv
+
+---
+
+input 'Koi to Senkyo to Chocolate - S01E01.mkv' as 0
+
+filter trim 0:v -> 0v
+    start 10
+    end 20
+    setpts PTS-STARTPTS
+    format yuv420p
+
+filter atrim 0:a -> 0a
+    start 10
+    end 20
+    setpts PTS-STARTPTS
+
+filter trim 0:v -> 1v
+    start 30
+    end 40
+    setpts PTS-STARTPTS
+    format yuv420p
+
+filter atrim 0:a -> 1a
+    start 30
+    end 40
+    setpts PTS-STARTPTS
+
+filter concat 0v 0a 1v 1a -> outv outa
+    n:2
+    v 1
+    a 1
+
+from outv outa 0:subs
+
+video
+    codec h264_videotoolbox
+    bitrate 3000k
+    allow_sw 1
+
+audio
+    codec aac_at
+    aq 10
+
+subtitles
+    copy
+
+output out.mkv
+
+---
+
+run
+-i (fzf) 
+-map : 
+-c:a aac_at 
+-aq 10 
+-c:s copy 
+-c:v libx265 
+-profile:v main10 
+-crf 24 
+-x265-params limit-sao=1:psy-rd=1:aq-mode=3:limit-tu=4:tu-intra-depth=4:tu-inter-depth=4:tskip=1:tskip-fast=1:constrained-intra=1
+ENCODED-(date).mkv
+
+---
+
+input (fzf)
+output ENCODED-(date).mkv
+map *
+audio
+    codec aac_at
+    aq 10
+subtitles
+    codec copy
+video
+    codec libx265
+    profile main10
+    cfr 24
+    x265-params
+        limit-sao=1
+        psy-rd=1
+        aq-mode=3
+        limit-tu=4
+        tu-intra-depth=4
+        tu-inter-depth=4
+        tskip=1
+        tskip-fast=1
+
+---
+
+run -i "input.video" -c:s copy -c:v hevc_nvenc -cq 31 -map 0 -max_muxing_queue_size 9999 out.mkv
+
+---
+
+max_muxing_queue_size 9999
+
+input input.video
+
+output out.mkv
+map 0
+subtitles
+    codec copy
+video
+    codec hevc_nvenc
+    cq 31

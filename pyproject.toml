@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ffmpeg-wrappers"
+version = "1.1.0"
+description = 'FFmpeg Wrappers'
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+keywords = []
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+    "attrs",
+    "rich",
+    "typer",
+]
+
+[project.scripts]
+pympeg = "ffmpeg_wrappers.cli.pympeg:main"
+pyprobe = "ffmpeg_wrappers.cli.pyprobe:main"
