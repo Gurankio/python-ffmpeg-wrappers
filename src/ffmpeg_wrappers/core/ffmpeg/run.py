@@ -73,7 +73,7 @@ def run(args: list[str], /, *, loglevel: str, interval: float) -> Generator[dict
 
         process = subprocess.Popen(
             tuple(filter(lambda i: i is not None, (
-                'run', '-n' if '-y' not in args else None,
+                'ffmpeg', '-n' if '-y' not in args else None,
                 '-hide_banner', '-nostdin', '-nostats',
                 '-loglevel', f'repeat+level+{loglevel}',
                 '-stats_period', str(interval),
