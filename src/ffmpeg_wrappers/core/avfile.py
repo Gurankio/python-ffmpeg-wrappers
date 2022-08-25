@@ -232,8 +232,6 @@ class Stream:
                 'codec_type': 'attachment',
                 'codec_tag': codec_tag,
                 'codec_tag_string': codec_tag_string,
-                'codec_name': codec_name,
-                'codec_long_name': codec_long_name,
                 'time_base': time_base,
                 'start_pts': start_pts,
                 'start_time': start_time,
@@ -251,7 +249,7 @@ class Stream:
 
                 return AttachmentStream(
                     index=index,
-                    codec_name=(codec_name, codec_long_name),
+                    codec_name=(data.get('codec_name', None), data.get('codec_long_name', None)),
                     codec_tag=(int(codec_tag, 16), codec_tag_string),
                     time_base=time_base,
                     start_pts=start_pts,
