@@ -7,6 +7,7 @@ from rich.tree import Tree
 from typer import run
 
 from ffmpeg_wrappers.core.avfile import AvFile, VideoStream, AudioStream, SubtitleStream, AttachmentStream
+from ffmpeg_wrappers.utils.ISO_639_2_UTF8 import langs
 
 
 def display_time(seconds):

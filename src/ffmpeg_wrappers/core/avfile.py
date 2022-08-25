@@ -244,7 +244,7 @@ class Stream:
                 'duration_ts': duration_ts,
                 **other
             }:
-                if len(other) > 0:
+                if len([k for k in other.keys() if k not in ('codec_name', 'codec_long_name')]) > 0:
                     print(other)  # TODO: proper handling.
 
                 return AttachmentStream(
