@@ -110,17 +110,16 @@ def streams_tree(avfile):
                 )
 
             case SubtitleStream():
-                if codec not in codecs:
-                    codecs[codec] = subtitle.add(codec).add('', style='green3')
-
-                codecs[codec].label += ', ' if codecs[codec].label != '' else ''
-                codecs[codec].label += f'{langs()[s.tags["language"]]["english"]} "{s.tags["title"]}" ({s.index:02})'
+                subtitle.add(f'{langs()[s.tags["language"]]["english"]} "{s.tags["title"]}" ({s.index:02})')
 
             case AttachmentStream():
                 if codec not in codecs:
+                    codec = codec if codec != 'NONE' else 'UNKNOWN'
                     codecs[codec] = attachment.add(codec, style='magenta2').add('', style='magenta3')
 
                 codecs[codec].label += ', ' if codecs[codec].label != '' else ''
+                if codec == 'UNKNOWN':
+                    codecs[codec].label += f'{s.tags["filename"]!r} '
                 codecs[codec].label += f'({s.index:02})'
 
     for category in streams.children:
