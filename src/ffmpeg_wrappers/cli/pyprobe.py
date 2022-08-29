@@ -110,17 +110,24 @@ def streams_tree(avfile):
                 )
 
             case SubtitleStream():
-                subtitle.add(f'{langs()[s.tags["language"]]["english"]} "{s.tags["title"]}" ({s.index:02})')
+                subtitle.add(
+                    f'{langs()[s.tags["language"]]["english"]} "{s.tags["title"]}" ({s.index:02})',
+                    style='green3'
+                )
 
             case AttachmentStream():
-                if codec not in codecs:
-                    codec = codec if codec != 'NONE' else 'UNKNOWN'
-                    codecs[codec] = attachment.add(codec, style='magenta2').add('', style='magenta3')
+                if codec == 'NONE':
+                    attachment.add(
+                        f'{s.tags["filename"]} ',
+                        style='magenta3'
+                    )
 
-                codecs[codec].label += ', ' if codecs[codec].label != '' else ''
-                if codec == 'UNKNOWN':
-                    codecs[codec].label += f'{s.tags["filename"]!r} '
-                codecs[codec].label += f'({s.index:02})'
+                else:
+                    if codec not in codecs:
+                        codecs[codec] = attachment.add(codec, style='magenta2').add('', style='magenta3')
+
+                    codecs[codec].label += ', ' if codecs[codec].label != '' else ''
+                    codecs[codec].label += f'({s.index:02})'
 
     for category in streams.children:
         if len(category.children) == 1:
@@ -131,7 +138,8 @@ def streams_tree(avfile):
 
 def pyprobe(avfile: Path):
     avfile = AvFile.from_path(avfile)
-    print(f'[bold]{avfile.path.name}[/bold], [bright_red]{display_time(avfile.duration)}[/bright_red] long, [bright_cyan]{display_size(avfile.size)}[/bright_cyan]')
+    print(
+        f'[bold]{avfile.path.name}[/bold], [bright_red]{display_time(avfile.duration)}[/bright_red] long, [bright_cyan]{display_size(avfile.size)}[/bright_cyan]')
     print()
     if len(avfile.chapters) > 0:
         chapter_timeline(avfile)
