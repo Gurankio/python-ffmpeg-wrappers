@@ -204,8 +204,6 @@ class Stream:
                 'extradata_size': extra_data_size,
                 'disposition': disposition,
                 'tags': tags,
-                'duration': duration,
-                'duration_ts': duration_ts,
                 **other
             }:
                 if len(other) > 0:
@@ -222,9 +220,7 @@ class Stream:
                     avg_frame_rate=avg_frame_rate,
                     extra_data_size=extra_data_size,
                     disposition=StreamDisposition.from_dict(disposition),
-                    tags=tags,
-                    duration=duration,
-                    duration_ts=duration_ts
+                    tags=tags
                 )
 
             case {
@@ -301,8 +297,7 @@ class AudioStream(Stream):
 
 @frozen(field_transformer=compose_hooks(keyword_only, auto_converter))
 class SubtitleStream(Stream):
-    duration: float
-    duration_ts: int
+    pass
 
 
 @frozen(field_transformer=compose_hooks(keyword_only, auto_converter))
